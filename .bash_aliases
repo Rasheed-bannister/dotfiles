@@ -111,13 +111,19 @@ yolo_push() {
     git add .
 
     # Prompt for a commit message
-    read "?Enter commit message: " commit_message
+    read -p "Enter commit message: " commit_message
     if [[ -z "$commit_message" ]]; then
         echo "Commit message cannot be empty. Aborting."
         return 1
     fi
 
-    git commit -m "$commit_message" && git push
-
+    # check if the force flag is set
+    if [[ "$1" == "bruh" ]]; then
+        git commit -m "$commit_message" --no-verify && git push --force
+        return 0
+    else
+        git commit -m "$commit_message" && git push
+        return 0
+    fi
 }
 alias yolo='yolo_push'
